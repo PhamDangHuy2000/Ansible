@@ -1,0 +1,34 @@
+- name: dat ip cho loopback
+    host: R1
+
+    task:
+      - name: Set loopback IPv4 address
+        ios_l3_interface: 
+          name: Loopback 0
+          ipv4: 10.1.1.1/24
+
+      - name: Set Ethernet0/1 IPv4 address
+        ios_l3_interface:
+          name: Ethernet0/1
+          ipv4: 192.168.12.1/24
+      - name: no shut
+        ios_interface:
+          name: Ethernet0/1
+          state: present
+      
+      - name: Set Ethernet0/2 IPv4 address
+        ios_l3_interface:
+          name: Ethernet0/2
+          ipv4: 192.168.1.1/24
+      - name: no shut
+        ios_interface:
+          name: Ethernet0/2
+          state: present
+
+      - name: Show ip
+        ios_command:
+          command:
+            - sh ip int br
+        resgister: Show ip
+
+      - debug: var=show_ip.stdout_lines  
